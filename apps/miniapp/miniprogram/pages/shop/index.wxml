@@ -1,0 +1,27 @@
+<view class="container">
+  <view wx:if="{{submitted}}" class="card">
+    <view class="title">入驻申请已提交</view>
+    <view class="status">当前状态：{{auditStatusName}}</view>
+    <view class="muted">营业执照真实性由平台人工核验，审核结果将通过订阅消息通知（M6 接入）。</view>
+  </view>
+
+  <view wx:else class="card">
+    <view class="title">店家入驻申请</view>
+    <view class="muted section-tip">需提供营业执照号与手机号，审核通过后方可下单。</view>
+
+    <view class="field">
+      <view class="label">花店名称</view>
+      <input bindinput="onNameInput" placeholder="请输入花店名称" value="{{name}}" />
+    </view>
+    <view class="field">
+      <view class="label">营业执照号</view>
+      <input bindinput="onLicenseInput" placeholder="请输入营业执照号" value="{{licenseNo}}" />
+    </view>
+    <view class="field">
+      <view class="label">联系电话</view>
+      <input bindinput="onPhoneInput" placeholder="请输入联系电话" value="{{contactPhone}}" />
+    </view>
+
+    <button class="btn-primary" loading="{{submitting}}" bindtap="onSubmit">提交申请</button>
+  </view>
+</view>

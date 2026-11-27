@@ -1,0 +1,20 @@
+{
+  "description": "鲜花批发零售小程序 - 原生微信TS",
+  "appid": "touristappid",
+  "projectname": "flower-wholesale-miniapp",
+  "miniprogramRoot": "miniprogram/",
+  "compileType": "miniprogram",
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true,
+    "newFeature": true,
+    "coverView": true,
+    "nodeModules": false,
+    "autoAudits": false,
+    "useCompilerPlugins": ["typescript"]
+  },
+  "libVersion": "3.5.0"
+}

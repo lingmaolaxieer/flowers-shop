@@ -1,0 +1,20 @@
+<view class="container">
+  <view class="muted hint">点击身份即可切换，切换后权限与可访问数据随之变化。</view>
+
+  <view
+    class="card identity"
+    wx:for="{{identities}}"
+    wx:key="id"
+    data-id="{{item.id}}"
+    bindtap="onSwitch"
+  >
+    <view class="info">
+      <view class="name">{{item.roleName}}</view>
+      <view class="muted">{{item.scopeDesc}}</view>
+    </view>
+    <view wx:if="{{item.active}}" class="tag-active">当前</view>
+    <view wx:else class="tag-switch">切换</view>
+  </view>
+
+  <view wx:if="{{identities.length === 0}}" class="card muted">暂无身份，请先登录或申请店家入驻。</view>
+</view>

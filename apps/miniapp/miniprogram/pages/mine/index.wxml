@@ -1,0 +1,48 @@
+<view class="container">
+  <view class="card">
+    <view class="title">{{loggedIn ? roleName : '未登录'}}</view>
+    <view wx:if="{{loggedIn}}" class="muted">身份 ID：{{identityId}} · {{scopeDesc}}</view>
+    <view wx:else class="muted">登录后可浏览商品、下单、切换身份</view>
+  </view>
+
+  <view wx:if="{{loggedIn}}" class="card">
+    <view class="row" bindtap="goSwitch">
+      <view>切换身份</view>
+      <view class="muted">共 {{identityCount}} 个身份 ›</view>
+    </view>
+    <view class="row" bindtap="goShopApply">
+      <view>店家入驻申请</view>
+      <view class="muted">›</view>
+    </view>
+  </view>
+
+  <view wx:if="{{loggedIn}}" class="card">
+    <view class="section-title">我的服务</view>
+    <view class="row" bindtap="goProducts">
+      <view>浏览商品</view>
+      <view class="muted">›</view>
+    </view>
+    <view wx:if="{{showCustomerEntries}}" class="row" bindtap="goOrders">
+      <view>我的订单</view>
+      <view class="muted">›</view>
+    </view>
+    <view wx:if="{{showCustomerEntries}}" class="row" bindtap="goCart">
+      <view>购物车</view>
+      <view class="muted">›</view>
+    </view>
+    <view wx:if="{{showPickerEntry}}" class="row" bindtap="goScan">
+      <view>扫码出货</view>
+      <view class="muted">›</view>
+    </view>
+    <view wx:if="{{showDeliveryEntry}}" class="row" bindtap="goDelivery">
+      <view>配送管理</view>
+      <view class="muted">›</view>
+    </view>
+    <view wx:if="{{showStatementEntry}}" class="row" bindtap="goStatement">
+      <view>对账单</view>
+      <view class="muted">›</view>
+    </view>
+  </view>
+
+  <button wx:else class="btn-primary" bindtap="goLogin">去登录</button>
+</view>

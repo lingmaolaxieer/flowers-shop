@@ -1,0 +1,35 @@
+<view class="container">
+  <view class="card">
+    <view class="title">配货员扫码出货</view>
+    <view class="muted section-tip">扫描商品追溯码，核对批次、重量与损耗后出货。</view>
+    <button class="btn-primary" loading="{{submitting}}" bindtap="onScan">扫码出货</button>
+    <view wx:if="{{scannedCode}}" class="code">识别码：{{scannedCode}}</view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">出货信息（选填）</view>
+    <view class="field">
+      <view class="label">批次</view>
+      <input class="input" placeholder="批次号" value="{{batch}}" bindinput="onBatchInput" />
+    </view>
+    <view class="field">
+      <view class="label">重量</view>
+      <input class="input" type="digit" placeholder="重量" value="{{weight}}" bindinput="onWeightInput" />
+    </view>
+    <view class="field">
+      <view class="label">损耗</view>
+      <input class="input" type="digit" placeholder="损耗" value="{{loss}}" bindinput="onLossInput" />
+    </view>
+  </view>
+
+  <view wx:if="{{resultType}}" class="card result result-{{resultType}}">
+    <view class="result-title">
+      {{resultType === 'success' ? '出货成功' : resultType === 'duplicate' ? '重复扫码' : '防伪校验失败'}}
+    </view>
+    <view class="result-text">{{resultText}}</view>
+    <view wx:if="{{productName}}" class="muted">商品：{{productName}}</view>
+  </view>
+
+  <button class="print-btn" loading="{{printing}}" bindtap="onPrint">打印标签</button>
+  <view class="muted print-tip">需真机调试：TSPL 便携打印机，模拟器无蓝牙能力。</view>
+</view>

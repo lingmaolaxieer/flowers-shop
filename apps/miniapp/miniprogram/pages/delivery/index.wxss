@@ -1,0 +1,61 @@
+.title {
+  font-size: 34rpx;
+  font-weight: 600;
+  margin-bottom: 10rpx;
+}
+
+.section-tip {
+  margin-bottom: 8rpx;
+}
+
+.tip {
+  padding: 50rpx 0;
+  text-align: center;
+}
+
+.order.selected {
+  border: 2rpx solid #e8543f;
+}
+
+.order-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10rpx;
+}
+
+.order-id {
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.status {
+  font-size: 24rpx;
+  color: #e8543f;
+}
+
+.address {
+  margin-top: 10rpx;
+  font-size: 26rpx;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  margin-bottom: 16rpx;
+}
+
+.selected-tip {
+  margin-bottom: 16rpx;
+}
+
+.input {
+  background: #f7f8fa;
+  border-radius: 12rpx;
+  padding: 18rpx 20rpx;
+  font-size: 28rpx;
+}
+
+.update-btn {
+  margin-top: 20rpx;
+}

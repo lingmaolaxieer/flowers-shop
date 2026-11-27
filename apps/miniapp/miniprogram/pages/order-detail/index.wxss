@@ -1,0 +1,84 @@
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10rpx;
+}
+
+.title {
+  font-size: 34rpx;
+  font-weight: 600;
+}
+
+.status {
+  font-size: 28rpx;
+  color: #e8543f;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  margin-bottom: 18rpx;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14rpx 0;
+  border-bottom: 2rpx solid #f0f0f0;
+}
+
+.item-name {
+  flex: 1;
+  font-size: 28rpx;
+}
+
+.item .muted {
+  margin: 0 20rpx;
+}
+
+.item-subtotal {
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.fee-row {
+  margin-top: 18rpx;
+  font-size: 28rpx;
+  color: #4e5969;
+}
+
+.total {
+  margin-top: 10rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #e8543f;
+  text-align: right;
+}
+
+.info-row {
+  font-size: 28rpx;
+  line-height: 1.8;
+}
+
+.input {
+  background: #f7f8fa;
+  border-radius: 12rpx;
+  padding: 18rpx 20rpx;
+  font-size: 28rpx;
+}
+
+.msg-btn {
+  margin-top: 16rpx;
+  background: #fff;
+  border: 2rpx solid #e8543f;
+  color: #e8543f;
+  border-radius: 44rpx;
+  font-size: 28rpx;
+  padding: 14rpx 0;
+}
+
+.pay-btn {
+  margin-bottom: 30rpx;
+}

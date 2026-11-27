@@ -1,0 +1,25 @@
+{
+  "pages": [
+    "pages/auth/index",
+    "pages/identity/index",
+    "pages/shop/index",
+    "pages/mine/index",
+    "pages/products/index",
+    "pages/product-detail/index",
+    "pages/cart/index",
+    "pages/orders/index",
+    "pages/order-detail/index",
+    "pages/scan/index",
+    "pages/delivery/index",
+    "pages/statement/index"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "鲜花批发零售",
+    "backgroundColor": "#f7f7f7",
+    "backgroundTextStyle": "light"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

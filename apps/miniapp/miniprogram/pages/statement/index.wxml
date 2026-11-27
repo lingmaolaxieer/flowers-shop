@@ -1,0 +1,20 @@
+<view class="container">
+  <view wx:if="{{loading && statements.length === 0}}" class="muted tip">加载中...</view>
+  <view wx:elif="{{statements.length === 0}}" class="muted tip">暂无对账单</view>
+
+  <view wx:for="{{statements}}" wx:key="id" class="card">
+    <view class="head">
+      <view class="title">{{item.shopName || '花店'}} · {{item.period || item.id}}</view>
+      <view class="status">{{item.statusName}}</view>
+    </view>
+    <view class="muted">{{item.createdAt || ''}}</view>
+    <view class="amount">金额：¥{{item.amountText}}</view>
+    <button
+      wx:if="{{item.status === 'pending'}}"
+      class="confirm-btn"
+      loading="{{confirmingId === item.id}}"
+      data-id="{{item.id}}"
+      bindtap="onConfirm"
+    >确认对账</button>
+  </view>
+</view>

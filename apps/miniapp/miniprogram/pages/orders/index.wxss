@@ -1,0 +1,63 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: 600;
+}
+
+.link {
+  font-size: 28rpx;
+  color: #e8543f;
+}
+
+.tip {
+  padding: 60rpx 0;
+  text-align: center;
+}
+
+.group {
+  margin-bottom: 28rpx;
+}
+
+.status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8rpx 16rpx;
+}
+
+.status-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #e8543f;
+}
+
+.order-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10rpx;
+}
+
+.order-id {
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.order-status {
+  font-size: 24rpx;
+  color: #e8543f;
+}
+
+.amount {
+  margin-top: 14rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #e8543f;
+  text-align: right;
+}

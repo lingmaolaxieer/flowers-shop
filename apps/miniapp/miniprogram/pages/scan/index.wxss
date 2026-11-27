@@ -1,0 +1,87 @@
+.title {
+  font-size: 34rpx;
+  font-weight: 600;
+  margin-bottom: 12rpx;
+}
+
+.section-tip {
+  margin-bottom: 24rpx;
+}
+
+.code {
+  margin-top: 20rpx;
+  font-size: 28rpx;
+  color: #4e5969;
+  word-break: break-all;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  margin-bottom: 20rpx;
+}
+
+.field {
+  margin-bottom: 24rpx;
+}
+
+.label {
+  font-size: 28rpx;
+  margin-bottom: 10rpx;
+  color: #4e5969;
+}
+
+.input {
+  background: #f7f8fa;
+  border-radius: 12rpx;
+  padding: 18rpx 20rpx;
+  font-size: 28rpx;
+}
+
+.result-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  margin-bottom: 10rpx;
+}
+
+.result-text {
+  font-size: 28rpx;
+}
+
+.result-success {
+  border-left: 8rpx solid #00b42a;
+}
+
+.result-success .result-title {
+  color: #00b42a;
+}
+
+.result-duplicate {
+  border-left: 8rpx solid #ff7d00;
+}
+
+.result-duplicate .result-title {
+  color: #ff7d00;
+}
+
+.result-antiFail {
+  border-left: 8rpx solid #f53f3f;
+}
+
+.result-antiFail .result-title {
+  color: #f53f3f;
+}
+
+.print-btn {
+  background: #fff;
+  border: 2rpx solid #e8543f;
+  color: #e8543f;
+  border-radius: 44rpx;
+  font-size: 30rpx;
+  padding: 18rpx 0;
+}
+
+.print-tip {
+  margin-top: 16rpx;
+  text-align: center;
+}

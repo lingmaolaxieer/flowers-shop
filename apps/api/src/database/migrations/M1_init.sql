@@ -1,0 +1,155 @@
+-- M1 初始化 SQL（与 1700000000000-M1Init.ts 等价，供人工核对/直接执行）
+-- 执行方式：mysql -uroot -p flower_ws < M1_init.sql
+-- 推荐使用 TypeORM migration：npm run migration:run
+
+CREATE TABLE IF NOT EXISTS tenants (
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(128) NOT NULL,
+  type ENUM('platform','supplier') NOT NULL DEFAULT 'supplier',
+  status TINYINT NOT NULL DEFAULT 1,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS suppliers (
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  tenant_id BIGINT NOT NULL,
+  name VARCHAR(128) NOT NULL,
+  contact_name VARCHAR(64) NULL,
+  contact_phone VARCHAR(20) NULL,
+  status TINYINT NOT NULL DEFAULT 1,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_suppliers_tenant (tenant_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS shops (
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  tenant_id BIGINT NOT NULL,
+  supplier_id BIGINT NOT NULL,
+  name VARCHAR(128) NOT NULL,
+  owner_user_id BIGINT NOT NULL,
+  license_no VARCHAR(64) NOT NULL,
+  contact_phone VARCHAR(20) NOT NULL,
+  audit_status ENUM('pending','approved','rejected') NOT NULL DEFAULT 'pending',
+  audited_by BIGINT NULL,
+  audited_at DATETIME NULL,
+  audit_remark VARCHAR(255) NULL,
+  settlement_cycle VARCHAR(10) NOT NULL DEFAULT 'month',
+  status TINYINT NOT NULL DEFAULT 1,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_shops_tenant_supplier (tenant_id, supplier_id),
+  KEY idx_shops_owner (owner_user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS users (
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  openid VARCHAR(64) NOT NULL,
+  unionid VARCHAR(64) NULL,
+  phone VARCHAR(20) NULL,
+  status TINYINT NOT NULL DEFAULT 1,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uk_users_openid (openid)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS user_identities (
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  user_id BIGINT NOT NULL,
+  tenant_id BIGINT NOT NULL,
+  role_code ENUM('PLATFORM_ADMIN','SUPPLIER_ADMIN','SUPPLIER_PICKER','SUPPLIER_SERVICE','SHOP_MANAGER','SHOP_STAFF','CUSTOMER','DELIVERY_PERSON') NOT NULL,
+  supplier_id BIGINT NULL,
+  shop_id BIGINT NULL,
+  audit_status ENUM('pending','approved','rejected') NOT NULL DEFAULT 'approved',
+  last_used_at DATETIME NULL,
+  status TINYINT NOT NULL DEFAULT 1,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_ui_user (user_id),
+  KEY idx_ui_tenant (tenant_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS roles (
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  tenant_id BIGINT NULL,
+  role_code VARCHAR(64) NOT NULL,
+  name VARCHAR(64) NOT NULL,
+  scope ENUM('platform','supplier','shop','personal') NOT NULL DEFAULT 'personal',
+  status TINYINT NOT NULL DEFAULT 1,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_roles_tenant_code (tenant_id, role_code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS permissions (
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  perm_code VARCHAR(64) NOT NULL,
+  module VARCHAR(64) NOT NULL,
+  action VARCHAR(64) NOT NULL,
+  description VARCHAR(128) NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uk_perm_code (perm_code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS role_permissions (
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  role_id BIGINT NOT NULL,
+  perm_id BIGINT NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uk_role_perm (role_id, perm_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS user_role_bindings (
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  user_id BIGINT NOT NULL,
+  role_id BIGINT NOT NULL,
+  tenant_id BIGINT NOT NULL,
+  supplier_id BIGINT NULL,
+  shop_id BIGINT NULL,
+  status TINYINT NOT NULL DEFAULT 1,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_urb_user (user_id),
+  KEY idx_urb_tenant_role (tenant_id, role_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS shop_audits (
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  tenant_id BIGINT NOT NULL,
+  supplier_id BIGINT NOT NULL,
+  shop_id BIGINT NOT NULL,
+  license_no VARCHAR(64) NOT NULL,
+  license_image VARCHAR(255) NULL,
+  contact_phone VARCHAR(20) NOT NULL,
+  status ENUM('pending','approved','rejected') NOT NULL DEFAULT 'pending',
+  auditor_id BIGINT NULL,
+  audit_remark VARCHAR(255) NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_sa_tenant_status (tenant_id, status),
+  KEY idx_sa_shop (shop_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS system_configs (
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  `key` VARCHAR(64) NOT NULL,
+  value TEXT NOT NULL,
+  description VARCHAR(255) NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uk_config_key (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

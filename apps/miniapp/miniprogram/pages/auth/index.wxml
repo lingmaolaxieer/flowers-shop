@@ -1,0 +1,18 @@
+<view class="container">
+  <view class="card">
+    <view class="title">鲜花批发零售</view>
+    <view class="muted">登录后可使用批发、零售、配送等全部功能</view>
+  </view>
+
+  <button class="btn-primary" loading="{{loading}}" bindtap="onLogin">微信一键登录</button>
+
+  <button
+    wx:if="{{!phoneHint}}"
+    class="btn-phone"
+    open-type="getPhoneNumber"
+    bindgetphonenumber="onGetPhoneNumber"
+  >绑定手机号（需后台开通组件）</button>
+  <view wx:else class="muted">{{phoneHint}}</view>
+
+  <view class="muted tip">同一微信用户可拥有多个身份，登录后可在「我的」中切换。</view>
+</view>

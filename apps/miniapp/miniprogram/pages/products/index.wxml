@@ -1,0 +1,27 @@
+<view class="container">
+  <view class="header">
+    <view class="title">鲜花商品</view>
+    <view class="cart-entry" bindtap="goCart">购物车 ›</view>
+  </view>
+
+  <view wx:if="{{loading && products.length === 0}}" class="muted tip">加载中...</view>
+  <view wx:elif="{{products.length === 0}}" class="muted tip">暂无商品</view>
+
+  <view
+    wx:for="{{products}}"
+    wx:key="id"
+    class="card product"
+    data-id="{{item.id}}"
+    bindtap="goDetail"
+  >
+    <image wx:if="{{item.image}}" class="thumb" src="{{item.image}}" mode="aspectFill" />
+    <view class="info">
+      <view class="name">{{item.name}}</view>
+      <view class="meta">
+        品种：{{item.variety || '-'}} · 等级：{{item.grade || '-'}} · 产地：{{item.origin || '-'}}
+      </view>
+      <view class="meta">规格：{{item.spec || '-'}} · 单位：{{item.unit || '-'}}</view>
+      <view class="price">¥{{item.retailPriceText}}<text wx:if="{{item.unit}}"> / {{item.unit}}</text></view>
+    </view>
+  </view>
+</view>

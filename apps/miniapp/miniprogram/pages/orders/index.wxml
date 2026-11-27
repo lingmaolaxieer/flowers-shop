@@ -1,0 +1,31 @@
+<view class="container">
+  <view class="header">
+    <view class="title">我的订单</view>
+    <view class="link" bindtap="goProducts">去选购 ›</view>
+  </view>
+
+  <view wx:if="{{loading && groups.length === 0}}" class="muted tip">加载中...</view>
+  <view wx:elif="{{groups.length === 0}}" class="muted tip">暂无订单</view>
+
+  <view wx:for="{{groups}}" wx:key="status" class="group">
+    <view class="status-bar">
+      <view class="status-name">{{item.statusName}}</view>
+      <view class="muted">{{item.orders.length}} 笔</view>
+    </view>
+    <view
+      wx:for="{{item.orders}}"
+      wx:for-item="order"
+      wx:key="id"
+      class="card order"
+      data-id="{{order.id}}"
+      bindtap="goDetail"
+    >
+      <view class="order-head">
+        <view class="order-id">订单号：{{order.id}}</view>
+        <view class="order-status">{{order.statusName}}</view>
+      </view>
+      <view class="muted">{{order.shopName || '花店'}} · {{order.createdAt || ''}}</view>
+      <view class="amount">¥{{order.totalText}}</view>
+    </view>
+  </view>
+</view>

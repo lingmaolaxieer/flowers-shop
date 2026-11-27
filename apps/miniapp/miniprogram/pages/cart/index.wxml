@@ -1,0 +1,57 @@
+<view class="container">
+  <view wx:if="{{items.length === 0}}" class="card">
+    <view class="muted tip">购物车是空的，去挑选鲜花吧</view>
+    <button class="btn-primary" bindtap="goProducts">去逛逛</button>
+  </view>
+
+  <block wx:else>
+    <view class="card">
+      <view class="section-title">商品清单</view>
+      <view wx:for="{{items}}" wx:key="skuId" class="item">
+        <image wx:if="{{item.image}}" class="thumb" src="{{item.image}}" mode="aspectFill" />
+        <view class="item-info">
+          <view class="name">{{item.name}}</view>
+          <view class="muted">{{item.spec || '默认规格'}} · ¥{{item.retailPriceText}}/{{item.unit}}</view>
+          <view class="qty-row">
+            <view class="qty-btn" data-sku="{{item.skuId}}" data-delta="-1" bindtap="changeQty">-</view>
+            <view class="qty-num">{{item.qty}}</view>
+            <view class="qty-btn" data-sku="{{item.skuId}}" data-delta="1" bindtap="changeQty">+</view>
+            <view class="remove" data-sku="{{item.skuId}}" bindtap="removeItem">删除</view>
+          </view>
+        </view>
+        <view class="subtotal">¥{{item.subtotalText}}</view>
+      </view>
+    </view>
+
+    <view class="card">
+      <view class="section-title">收货与花店</view>
+      <view class="field">
+        <view class="label">花店</view>
+        <picker wx:if="{{shopNames.length > 0}}" range="{{shopNames}}" bindchange="onShopChange">
+          <view class="picker">{{shopIndex >= 0 ? shopNames[shopIndex] : '请选择花店'}}</view>
+        </picker>
+        <input
+          class="input"
+          placeholder="或手动输入 shopId"
+          value="{{shopIdInput}}"
+          bindinput="onShopIdInput"
+        />
+      </view>
+      <view class="field">
+        <view class="label">收货地址</view>
+        <input class="input" placeholder="请输入收货地址" value="{{address}}" bindinput="onAddressInput" />
+      </view>
+      <view class="field">
+        <view class="label">订单留言</view>
+        <input class="input" placeholder="选填" value="{{remark}}" bindinput="onRemarkInput" />
+      </view>
+      <button class="quote-btn" loading="{{quoting}}" bindtap="onQuote">试算配送费</button>
+      <view class="fee">配送费：¥{{deliveryFeeText}}</view>
+    </view>
+
+    <view class="bottom-bar">
+      <view class="total">合计：¥{{totalText}}</view>
+      <button class="btn-primary submit-btn" loading="{{submitting}}" bindtap="onSubmit">提交订单</button>
+    </view>
+  </block>
+</view>

@@ -1,0 +1,31 @@
+{
+  "name": "flower-wholesale",
+  "version": "0.1.0",
+  "private": true,
+  "description": "鲜花批发零售微信小程序 - Monorepo 根",
+  "workspaces": [
+    "packages/shared",
+    "apps/api",
+    "apps/admin"
+  ],
+  "scripts": {
+    "build:shared": "npm run build -w @flower/shared",
+    "build:api": "npm run build -w @flower/api",
+    "dev:api": "npm run dev -w @flower/api",
+    "start:api": "npm run start:prod -w @flower/api",
+    "migration:run": "npm run migration:run -w @flower/api",
+    "migration:revert": "npm run migration:revert -w @flower/api",
+    "seed": "npm run seed -w @flower/api",
+    "dev:admin": "npm run dev -w @flower/admin",
+    "build:admin": "npm run build -w @flower/admin",
+    "infra:up": "docker compose up -d mysql redis",
+    "infra:down": "docker compose down"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@nestjs/platform-express": "^10.4.22",
+    "better-sqlite3": "^11.10.0"
+  }
+}

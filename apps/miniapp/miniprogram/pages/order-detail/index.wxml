@@ -1,0 +1,45 @@
+<view class="container">
+  <view class="card">
+    <view class="head">
+      <view class="title">订单 {{orderId}}</view>
+      <view class="status">{{statusName}}</view>
+    </view>
+    <view class="muted">{{shopName}} · {{createdAt}}</view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">商品明细</view>
+    <view wx:for="{{items}}" wx:key="skuId" class="item">
+      <view class="item-name">{{item.itemName}}</view>
+      <view class="muted">¥{{item.retailPriceText}} × {{item.qty}}</view>
+      <view class="item-subtotal">¥{{item.subtotalText}}</view>
+    </view>
+    <view wx:if="{{items.length === 0}}" class="muted">暂无明细</view>
+    <view class="fee-row">配送费：¥{{deliveryFeeText}}</view>
+    <view class="total">合计：¥{{totalText}}</view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">收货信息</view>
+    <view class="info-row">地址：{{address || '-'}}</view>
+    <view class="info-row">留言：{{remark || '-'}}</view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">配送信息</view>
+    <block wx:if="{{delivery}}">
+      <view class="info-row">物流：{{delivery.company || '-'}}</view>
+      <view class="info-row">单号：{{delivery.trackingNo || '-'}}</view>
+      <view class="info-row">配送员：{{delivery.driverName || '-'}} {{delivery.driverPhone || ''}}</view>
+    </block>
+    <view wx:else class="muted">暂无配送信息</view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">订单留言</view>
+    <input class="input" placeholder="输入留言内容" value="{{message}}" bindinput="onMessageInput" />
+    <button class="msg-btn" loading="{{messaging}}" bindtap="sendMessage">发送留言</button>
+  </view>
+
+  <button class="btn-primary pay-btn" loading="{{paying}}" bindtap="onPay">立即支付</button>
+</view>

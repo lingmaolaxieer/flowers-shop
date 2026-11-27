@@ -1,0 +1,31 @@
+.hint {
+  margin-bottom: 20rpx;
+}
+
+.identity {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.name {
+  font-size: 32rpx;
+  font-weight: 500;
+  margin-bottom: 8rpx;
+}
+
+.tag-active {
+  color: #fff;
+  background: #e8543f;
+  border-radius: 20rpx;
+  padding: 6rpx 20rpx;
+  font-size: 24rpx;
+}
+
+.tag-switch {
+  color: #e8543f;
+  border: 2rpx solid #e8543f;
+  border-radius: 20rpx;
+  padding: 4rpx 20rpx;
+  font-size: 24rpx;
+}

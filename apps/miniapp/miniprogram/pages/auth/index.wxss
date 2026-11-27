@@ -1,0 +1,20 @@
+.title {
+  font-size: 40rpx;
+  font-weight: 600;
+  margin-bottom: 12rpx;
+}
+
+.btn-phone {
+  margin-top: 24rpx;
+  background: #fff;
+  color: #e8543f;
+  border: 2rpx solid #e8543f;
+  border-radius: 44rpx;
+  font-size: 28rpx;
+  padding: 16rpx 0;
+}
+
+.tip {
+  margin-top: 40rpx;
+  text-align: center;
+}
