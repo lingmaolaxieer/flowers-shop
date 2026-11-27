@@ -7,7 +7,7 @@
 
 ## 0. 一句话状态
 
-鲜花批发零售微信小程序（Monorepo）**M0–M9 全部里程碑已实现**，三端（shared / api / admin）类型检查零错误，并已在本机用 **SQLite 免 Docker 演示模式真实启动**、通过端到端冒烟测试。代码需推送到 `https://github.com/lingmaolaxieer/flowers-shop.git`（**当前卡在 GitHub 认证**，见第 9 节）。
+鲜花批发零售微信小程序（Monorepo）**M0–M9 全部里程碑已实现**，三端（shared / api / admin）类型检查零错误，并已在本机用 **SQLite 免 Docker 演示模式真实启动**、通过端到端冒烟测试。代码**已推送到** `https://github.com/lingmaolaxieer/flowers-shop.git`（`main` 分支，4 个提交 / 351 个文件，已远端核验，见第 9 节）。
 
 ---
 
@@ -137,7 +137,7 @@
 ## 7. 已知限制 / 未完成（按优先级）
 
 ### P0 — 必须人工介入
-1. **GitHub 推送认证**：本机无 `gh` CLI、无 `GITHUB_TOKEN`、无 SSH key、无 credential helper；`git ls-remote` 对目标仓库要求输入用户名（私有仓库或尚未创建）。需用户提供 PAT 或先在 GitHub 建好仓库。
+1. ~~**GitHub 推送认证**~~ → **已完成**：仓库已转 public，用户提供 classic PAT（`repo` scope）后已推送并核验。**提醒用户撤销该 token**（用完即弃）。
 2. **生产 MySQL 端到端未验证**：本机无 Docker/MySQL/Redis，只做了编译 + DI 静态审查 + dist 产出三项等价验证。需在有 Docker 的机器跑一遍 `infra:up → migration:run → seed → dev:api`。
 3. **微信能力全部走 Mock**：登录、支付 v3、分账、订阅消息、语音播报。需真实凭证（AppID/AppSecret、商户号/APIv3 密钥/证书、订阅模板 ID）。
 4. **需初始化数据**：`delivery_fee_rules` 无启用规则时 `POST /delivery/quote` 返回 404；`notification_templates` 无模板时 `/admin/notifications/send` 返回 400。当前未提供管理接口，需手工 INSERT 或补接口。
@@ -164,15 +164,16 @@
 
 **如果任务是「把代码交付出去」**：
 
-### 推送进度快照（2026-11-27 14:37，重要）
+### 推送进度快照（2026-11-27 14:45，已完成）
 
-- 本地仓库已就绪：`main` 分支 **3 个提交 / 351 个文件**，工作区干净，`origin` 已配置。
-- 匿名 `ls-remote` **成功**（用户已把仓库转 public，且是空仓库）。
-- `git push` **被本机代理拦截**：`github.com` 的 CONNECT tunnel 间歇返回 `502`；但 `api.github.com` 稳定可达（未认证会触发共享 IP 限流 403，带 token 正常）。
-- 因此已实现备用通道 `scripts/upload-via-api.py`（GitHub Git Data API，只用 api.github.com，绕过被拦域名）；另有 `scripts/push-to-github.sh`（常规 git push）。
-- **当前阻塞**：用户提供的 fine-grained PAT 有效（`login=lingmaolaxieer`，`GET /repos/...` 返回 200，仓库为空），但 `POST /git/blobs` 返回 `403 Resource not accessible by personal access token` → 该 token **缺 `Contents: Read & Write` 权限**（fine-grained token 需在 Repository permissions 里显式授予）。
-- **修复方式（二选一）**：① GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens → 编辑该 token → Repository permissions 加 `Contents: Read and Write`（`Metadata: Read` 保持）→ 确认 Repository access 包含 `flowers-shop` → Save；② 改用 classic PAT 并勾选 `repo` scope。之后重跑上传脚本即可。
-- **兜底**：`flowers-shop.bundle` 已生成（`git bundle create flowers-shop.bundle --all`，含完整历史，`git bundle verify` 通过），用户可在本机 `git clone flowers-shop.bundle` 后自行 push。
+- **上传成功并已核验**：远端 `refs/heads/main` = `ab6b6b3…`，与本地 HEAD 一致；`GET /git/trees/<sha>?recursive=1` 返回 **351 个文件、`truncated=false`**；4 个提交历史完整；`git status` 显示 `main...origin/main` 同步；抽查 `docs/HANDOFF.md` 远端可读（18 KB）。
+- 过程要点（供排障参考）：
+  - 仓库转 public 后匿名 `ls-remote` 成功，但**推送仍需认证**（public 只开放匿名读）。
+  - 首个 fine-grained PAT 缺 `Contents: Read & Write`，`POST /git/blobs` 返回 `403 Resource not accessible by personal access token`；改用 classic PAT（`repo` scope）后解决。
+  - `github.com` 的 CONNECT tunnel 曾间歇 `502`，`api.github.com` 稳定可达；故准备了 `scripts/upload-via-api.py`（Git Data API 兜底）与 `scripts/push-to-github.sh`（常规推送）。最终代理恢复，`git push -u origin main` 直接成功。
+  - **空仓库陷阱**：完全空的仓库直接 `POST /git/blobs` 会返回 `409 Git Repository is empty`；需先用 Contents API 建首个文件（生成初始 commit），或直接用 `git push`。
+- **请用户撤销本次使用的两个 PAT**（用完即弃），它们只在本对话中出现，未写入仓库任何文件。
+- **兜底**：`flowers-shop.bundle` 已生成（含完整历史，`git bundle verify` 通过），可在本机 `git clone flowers-shop.bundle` 后自行 push。
 
 ### 通用推送步骤
 
