@@ -163,10 +163,23 @@
 ## 8. 下一步具体动作（给下一个 Agent）
 
 **如果任务是「把代码交付出去」**：
-1. 解决 GitHub 认证（向用户索取 PAT，或让用户先在 GitHub 创建仓库并授权）。
-2. `git -c http.version=HTTP/1.1` 可绕过本环境的 `HTTP2 framing layer` 报错（代理环境 `127.0.0.1:64267`）。**这是推送时的必要参数**。
-3. 推送：`git push -u origin main`（本地已 `git init` + 首次 commit，见第 10 节）。
-4. 确认远端 `git ls-remote` 能看到 `refs/heads/main`。
+
+### 推送进度快照（2026-11-27 14:37，重要）
+
+- 本地仓库已就绪：`main` 分支 **3 个提交 / 351 个文件**，工作区干净，`origin` 已配置。
+- 匿名 `ls-remote` **成功**（用户已把仓库转 public，且是空仓库）。
+- `git push` **被本机代理拦截**：`github.com` 的 CONNECT tunnel 间歇返回 `502`；但 `api.github.com` 稳定可达（未认证会触发共享 IP 限流 403，带 token 正常）。
+- 因此已实现备用通道 `scripts/upload-via-api.py`（GitHub Git Data API，只用 api.github.com，绕过被拦域名）；另有 `scripts/push-to-github.sh`（常规 git push）。
+- **当前阻塞**：用户提供的 fine-grained PAT 有效（`login=lingmaolaxieer`，`GET /repos/...` 返回 200，仓库为空），但 `POST /git/blobs` 返回 `403 Resource not accessible by personal access token` → 该 token **缺 `Contents: Read & Write` 权限**（fine-grained token 需在 Repository permissions 里显式授予）。
+- **修复方式（二选一）**：① GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens → 编辑该 token → Repository permissions 加 `Contents: Read and Write`（`Metadata: Read` 保持）→ 确认 Repository access 包含 `flowers-shop` → Save；② 改用 classic PAT 并勾选 `repo` scope。之后重跑上传脚本即可。
+- **兜底**：`flowers-shop.bundle` 已生成（`git bundle create flowers-shop.bundle --all`，含完整历史，`git bundle verify` 通过），用户可在本机 `git clone flowers-shop.bundle` 后自行 push。
+
+### 通用推送步骤
+
+1. 解决认证（PAT 需 `repo` scope 或 fine-grained 的 `Contents` 写权限）。
+2. `git -c http.version=HTTP/1.1` 可绕过本环境的 `HTTP2 framing layer` 报错（代理端口会变，用 `env | grep -i proxy` 查当前值）。
+3. 优先 `git push -u origin main`；若遇 502，改用 `GITHUB_TOKEN=... python3 scripts/upload-via-api.py`。
+4. 确认远端 `git ls-remote` 能看到 `refs/heads/main`，或 `GET /repos/lingmaolaxieer/flowers-shop/contents/README.md` 返回 200。
 
 **如果任务是「继续开发」**，优先顺序建议：
 1. 补 P1 的订单发货闭环（M4 → M3 状态机）与支付扣库存（M5 → M2）。
