@@ -49,3 +49,6 @@ temp/
 # ===== 上传/运行时生成的静态资源 =====
 apps/api/uploads/
 apps/api/public/uploads/
+
+# ===== 离线交付包（git bundle，非源码）=====
+*.bundle
